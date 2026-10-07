@@ -40,8 +40,8 @@ while running:
 
     dx = int(SDLK_RIGHT in pressed_keys) - int(SDLK_LEFT in pressed_keys)
     dy = int(SDLK_UP in pressed_keys) - int(SDLK_DOWN in pressed_keys)
-    x += dx * speed
-    y += dy * speed
+    x = min(max(x + dx * speed, 50), TUK_WIDTH - 50)
+    y = min(max(y + dy * speed, 50), TUK_HEIGHT - 50)
 
     moving = dx != 0 or dy != 0
     if moving:
