@@ -10,6 +10,8 @@ character = load_image('animation_sheet.png')
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
 speed = 5
+frame = 0
+facing_right = True
 pressed_keys = set()
 
 
@@ -31,13 +33,27 @@ def handle_events():
 while running:
     handle_events()
 
-    x += (int(SDLK_RIGHT in pressed_keys) - int(SDLK_LEFT in pressed_keys)) * speed
-    y += (int(SDLK_UP in pressed_keys) - int(SDLK_DOWN in pressed_keys)) * speed
+    if SDLK_RIGHT in pressed_keys:
+        facing_right = True
+    elif SDLK_LEFT in pressed_keys:
+        facing_right = False
+
+    dx = int(SDLK_RIGHT in pressed_keys) - int(SDLK_LEFT in pressed_keys)
+    dy = int(SDLK_UP in pressed_keys) - int(SDLK_DOWN in pressed_keys)
+    x += dx * speed
+    y += dy * speed
+
+    moving = dx != 0 or dy != 0
+    if moving:
+        animation_y = 100 if facing_right else 0
+    else:
+        animation_y = 300 if facing_right else 200
 
     clear_canvas()
     tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
-    character.clip_draw(0, 300, 100, 100, x, y)
+    character.clip_draw(frame * 100, animation_y, 100, 100, x, y)
     update_canvas()
+    frame = (frame + 1) % 8
     delay(0.05)
 
 close_canvas()
