@@ -1,3 +1,5 @@
+from math import hypot
+
 from pico2d import *
 
 # 1st commit: initialize canvas and load resource images
@@ -40,8 +42,10 @@ while running:
 
     dx = int(SDLK_RIGHT in pressed_keys) - int(SDLK_LEFT in pressed_keys)
     dy = int(SDLK_UP in pressed_keys) - int(SDLK_DOWN in pressed_keys)
-    x = min(max(x + dx * speed, 50), TUK_WIDTH - 50)
-    y = min(max(y + dy * speed, 50), TUK_HEIGHT - 50)
+    distance = hypot(dx, dy)
+    if distance:
+        x = min(max(x + dx * speed / distance, 50), TUK_WIDTH - 50)
+        y = min(max(y + dy * speed / distance, 50), TUK_HEIGHT - 50)
 
     moving = dx != 0 or dy != 0
     if moving:
@@ -51,7 +55,7 @@ while running:
 
     clear_canvas()
     tuk_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
-    character.clip_draw(frame * 100, animation_y, 100, 100, x, y)
+    character.clip_draw(frame * 100, animation_y, 100, 100, round(x), round(y))
     update_canvas()
     frame = (frame + 1) % 8
     delay(0.05)
