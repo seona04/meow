@@ -1,6 +1,16 @@
 from pico2d import *
 import random
 
+class Grass:
+        pass
+
+
+class Boy:
+    
+
+
+class Ball:
+
 
 def main():
     open_canvas()
